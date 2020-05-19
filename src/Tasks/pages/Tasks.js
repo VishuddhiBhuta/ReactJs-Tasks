@@ -3,6 +3,16 @@ import './Tasks.css'
 import Tasklist from '../components/Tasklist'
 import CompletedTasksList from '../components/CompletedTasksList'
 
+
+
+
+/**
+ * Parent:
+ *      App
+ * Child: 
+ *      TaskList
+ */
+
 export default class Tasks extends React.Component {
 
     state = {
@@ -18,7 +28,8 @@ export default class Tasks extends React.Component {
                 isCompleted: true
             }
         ],
-        editIndex: -1
+        editIndex: -1,
+        isCompleted: false
     }
 
     handleChange = (event) => {
@@ -67,10 +78,9 @@ export default class Tasks extends React.Component {
         }
     }
 
-    changeStatus = (changeIndex, isCompleted = false) => {
-
+    changeStatus = (changeIndex, newStatus = false) => {
         let newArr = [...this.state.tasks]
-        newArr[changeIndex].isCompleted = isCompleted
+        newArr[changeIndex].isCompleted = newStatus
         console.log("new  => ", newArr)
 
         this.setState({
@@ -110,13 +120,15 @@ export default class Tasks extends React.Component {
                             data={this.state.tasks}
                             addTask={this.addTasks}
                             editTask={this.editTasks}
-                            completeHandleCheck={this.changeStatus} />
+                            completeHandleCheck={this.changeStatus}
+                            showCompleted={false} />
                     </div>
                     <div className="right-column">
                         <h4>List of Completed Tasks</h4>
-                        <CompletedTasksList
-                            completeddata={this.state.tasks}
-                            incompleteHandleCheck={this.changeStatus} />
+                        <Tasklist
+                            data={this.state.tasks}
+                            completeHandleCheck={this.changeStatus}
+                            showCompleted={true} />
                     </div>
                 </div>
             </div>
