@@ -15,15 +15,17 @@ export default class CompletedTasksList extends React.Component {
             return null;
         }
 
-        let completedtasklist = this.props.completeddata.map((completedTasks, index) => {
-            return (
-                <li key={completedTasks.completedText + index}>
-                    <span>{completedTasks.completedText}</span>
-                    <div className="flex-layout action-buttons">
-                        <label><input type="checkbox" onChange={() => { this.props.incompleteHandleCheck(index) }} defaultChecked={this.props.isChecked} />Mark as Incomplete</label>
-                    </div>
-                </li>
-            )
+        let completedtasklist = this.props.completeddata.map((tasks, index) => {
+            if (tasks.isCompleted) {
+                return (
+                    <li key={tasks.inputText + index}>
+                        <span>{tasks.inputText}</span>
+                        <div className="flex-layout action-buttons">
+                            <label><input type="checkbox" onChange={() => { this.props.incompleteHandleCheck(index, !tasks.isCompleted) }} />Mark as Incomplete</label>
+                        </div>
+                    </li>
+                )
+            }
         })
         return (
             <ul className="tasks-list">

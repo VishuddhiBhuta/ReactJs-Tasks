@@ -16,17 +16,19 @@ export default class Tasklist extends React.Component {
         }
 
         let tasklist = this.props.data.map((tasks, index) => {
-            return (
-                <li key={tasks.inputText + index}>
-                    {tasks.inputText}
-                    <div className="flex-layout action-buttons">
-                        <button title="Edit" className="edit-btn" onClick={() => {
-                            this.props.editTask(index)
-                        }}>Edit</button>
-                        <label><input type="checkbox" value={index} onChange={() => { this.props.completeHandleCheck(index) }} defaultChecked={this.props.isChecked} />Completed</label>
-                    </div>
-                </li>
-            )
+            if (!tasks.isCompleted) {
+                return (
+                    <li key={tasks.inputText + index}>
+                        {tasks.inputText}
+                        <div className="flex-layout action-buttons">
+                            <button title="Edit" className="edit-btn" onClick={() => {
+                                this.props.editTask(index)
+                            }}>Edit</button>
+                            <label><input type="checkbox" value={index} onChange={() => { this.props.completeHandleCheck(index, !tasks.isCompleted) }} defaultChecked={this.props.isChecked} />Completed</label>
+                        </div>
+                    </li>
+                )
+            }
         })
         return (
             <ul className="tasks-list">

@@ -8,11 +8,17 @@ export default class Tasks extends React.Component {
     state = {
         inputText: "",
         showForm: false,
-        tasks: [],
-        editIndex: -1,
-        isChecked: false,
-        completedText: "",
-        completedTasks: []
+        tasks: [
+            {
+                inputText: 'this is first task',
+                isCompleted: false
+            },
+            {
+                inputText: 'this is second task',
+                isCompleted: true
+            }
+        ],
+        editIndex: -1
     }
 
     handleChange = (event) => {
@@ -31,7 +37,8 @@ export default class Tasks extends React.Component {
 
     addTasks = () => {
         let task = {
-            inputText: this.state.inputText
+            inputText: this.state.inputText,
+            isCompleted: false
         }
         this.setState({
             tasks: [task, ...this.state.tasks],
@@ -60,29 +67,15 @@ export default class Tasks extends React.Component {
         }
     }
 
-    completeHandleCheck = (completeIndex) => {
-        let newObj = {
-            completedText: this.state.tasks[completeIndex].inputText
-        }
-        let filteredTasks = this.state.tasks.filter((task, index) => (index !== completeIndex))
-        //console.log(this.state.tasks[completeIndex])
-        this.setState({
-            tasks: filteredTasks,
-            completedTasks: [newObj, ...this.state.completedTasks],
-            //isChecked: !this.state.isChecked
-        });
-    }
+    changeStatus = (changeIndex, isCompleted = false) => {
 
-    incompleteHandleCheck = (incompleteIndex) => {
-        let newObj = {
-            inputText: this.state.completedTasks[incompleteIndex].completedText
-        }
-        let filteredTasks = this.state.completedTasks.filter((completetask, index) => (index !== incompleteIndex))
-        console.log(newObj)
+        let newArr = [...this.state.tasks]
+        newArr[changeIndex].isCompleted = isCompleted
+        console.log("new  => ", newArr)
+
         this.setState({
-            completedTasks: filteredTasks,
-            tasks: [newObj, ...this.state.tasks]
-        });
+            tasks: newArr
+        })
     }
 
     render() {
@@ -117,14 +110,13 @@ export default class Tasks extends React.Component {
                             data={this.state.tasks}
                             addTask={this.addTasks}
                             editTask={this.editTasks}
-                            isChecked={this.state.isChecked}
-                            completeHandleCheck={this.completeHandleCheck} />
+                            completeHandleCheck={this.changeStatus} />
                     </div>
                     <div className="right-column">
                         <h4>List of Completed Tasks</h4>
                         <CompletedTasksList
-                            completeddata={this.state.completedTasks}
-                            incompleteHandleCheck={this.incompleteHandleCheck} />
+                            completeddata={this.state.tasks}
+                            incompleteHandleCheck={this.changeStatus} />
                     </div>
                 </div>
             </div>
